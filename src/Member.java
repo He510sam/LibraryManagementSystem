@@ -13,4 +13,22 @@ public class Member extends Person{
                 this.membershipId = membershipId;
                 this.phoneNumber = phoneNumber;
     }
+
+    //setter & getter for return and set specific attributes
+
+    public String getMembershipId() {
+        return membershipId;
+    }
+
+    public void setMembershipId(String membershipId) {
+        this.membershipId = membershipId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
