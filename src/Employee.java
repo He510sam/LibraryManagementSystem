@@ -9,4 +9,14 @@ public class Employee extends Person{
         super(id, name, address);
         this.salary = salary;
     }
+
+    //setter & getter for return and set salary
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
 }
