@@ -19,7 +19,7 @@ public class Book {
         this.copies = copies;
     }
 
-    //setter & getter for return and set specific attributes
+    //setter & getter for return and set attributes
 
     public int getBookId() {
         return bookId;
