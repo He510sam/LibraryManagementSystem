@@ -1,4 +1,5 @@
 //Abstract class for everyone in the system
+
 public abstract class Person {
     //add attributes
 
@@ -38,10 +39,4 @@ public abstract class Person {
         this.address = address;
     }
 
-    //to show persons info
-    //its override because it has more options in child classes
-    @Override
-    public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Address: " + address;
-    }
 }

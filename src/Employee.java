@@ -1,4 +1,5 @@
 //A class that holds specific attributes for library Employee
+
 public class Employee extends Person{
 
     //Attribute for show salary
@@ -19,4 +20,5 @@ public class Employee extends Person{
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
 }

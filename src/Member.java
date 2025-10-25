@@ -1,4 +1,5 @@
 //A class that holds specific attributes for library Members
+
 public class Member extends Person{
 
     //define specific attributes for library Members
