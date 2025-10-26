@@ -30,4 +30,14 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
+    //This method adds a line to the end of the file.
+    public static void appendLine(String filename, String line) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
+            bw.write(line);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
