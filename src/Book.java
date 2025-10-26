@@ -51,11 +51,6 @@ public class Book {
         isAvailable = available;
     }
 
-    //override toString method for showing information
-    @Override
-    public String toString() {
-        return bookId + " - " + title + " by " + author + " [" + (isAvailable ? "Available" : "Borrowed") + "]";
-    }
 
     //methods for read and write info from files
     public String toCSV() {
@@ -70,4 +65,11 @@ public class Book {
         boolean avail = Boolean.parseBoolean(p[3]);
         return new Book(id, title, author, avail);
     }
+
+    //override toString method for showing information
+    @Override
+    public String toString() {
+        return bookId + " - " + title + " by " + author + " [" + (isAvailable ? "Available" : "Borrowed") + "]";
+    }
+
 }
