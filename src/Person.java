@@ -5,13 +5,11 @@ public abstract class Person {
 
     private int id;
     private String name;
-    private String address;
     //constructor for Initializing fields
 
-    public Person(int id, String name, String address){
+    public Person(int id, String name){
         this.id = id;
         this.name = name;
-        this.address = address;
     }
     //setter & getter for return and set attributes
 
@@ -28,15 +26,14 @@ public abstract class Person {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? "" : name.replace(",", "؛");
     }
 
-    public String getAddress() {
-        return address;
-    }
 
-    public void setAddress(String address) {
-        this.address = address;
+    //override toString method for showing information
+    @Override
+    public String toString() {
+        return id + " - " + name;
     }
 
 }
