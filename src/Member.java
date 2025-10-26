@@ -32,16 +32,27 @@ public class Member extends Person{
 
     //setter & getter for return and set specific attributes
     public String getMembershipId() { return membershipId; }
+
     public String getPhoneNumber() { return phoneNumber; }
+
     public String getUsername() { return username; }
+
     public String getPassword() { return password; }
+
     public double getPenalty() { return penalty; }
+
     public String getAddress() { return address; }
+
     public void setAddress(String address) { this.address = address; }
+
     public void setMembershipId(String membershipId) { this.membershipId = membershipId; }
+
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
     public void setUsername(String username) { this.username = username; }
+
     public void setPassword(String password) { this.password = password; }
+
     public void setPenalty(double penalty) { this.penalty = penalty; }
 
     //method to Checking for fines

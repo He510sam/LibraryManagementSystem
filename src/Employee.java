@@ -16,8 +16,11 @@ public class Employee extends Person{
 
     //setter & getter for return and set salary
     public String getUsername() { return username;}
+
     public String getPassword() { return password;}
+
     public void setUsername(String username) { this.username = username;}
+
     public void setPassword(String password) { this.password = password;}
 
     //methods for read and write info from files

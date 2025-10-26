@@ -13,22 +13,13 @@ public abstract class Person {
     }
     //setter & getter for return and set attributes
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) {this.id = id;}
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public void setName(String name) {
-        this.name = name == null ? "" : name.replace(",", "؛");
-    }
-
+    public void setName(String name) {this.name = name == null ? "" : name.replace(",", "؛");}
 
     //override toString method for showing information
     @Override
