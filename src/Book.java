@@ -8,15 +8,13 @@ public class Book {
     private String title;
     private String author;
     private boolean isAvailable;
-    private int copies;
 
     //constructor for Initializing fields
     public Book(int bookId, String title, String author, int copies) {
         this.bookId = bookId;
-        this.title = title;
-        this.author = author;
+        this.title = title == null ? "" : title.replace(",", "؛");
+        this.author = author == null ? "" : author.replace(",", "؛");
         this.isAvailable = true;
-        this.copies = copies;
     }
 
     //setter & getter for return and set attributes
@@ -53,11 +51,11 @@ public class Book {
         isAvailable = available;
     }
 
-    public int getCopies() {
-        return copies;
+    //override toString method for showing information
+    @Override
+    public String toString() {
+        return bookId + " - " + title + " by " + author + " [" + (isAvailable ? "Available" : "Borrowed") + "]";
     }
 
-    public void setCopies(int copies) {
-        this.copies = copies;
-    }
+
 }
