@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,5 +19,15 @@ public class FileManager {
         return lines;
     }
 
-
+    //Method for completely overwriting a file (overwriting)
+    public static void writeAllLines(String filename, List<String> lines) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+            for (String l : lines) {
+                bw.write(l);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
