@@ -10,11 +10,11 @@ public class Book {
     private boolean isAvailable;
 
     //constructor for Initializing fields
-    public Book(int bookId, String title, String author, int copies) {
+    public Book(int bookId, String title, String author,boolean isAvailable) {
         this.bookId = bookId;
         this.title = title == null ? "" : title.replace(",", "؛");
         this.author = author == null ? "" : author.replace(",", "؛");
-        this.isAvailable = true;
+        this.isAvailable = isAvailable;
     }
 
     //setter & getter for return and set attributes
@@ -57,5 +57,17 @@ public class Book {
         return bookId + " - " + title + " by " + author + " [" + (isAvailable ? "Available" : "Borrowed") + "]";
     }
 
+    //write methods for read and write info from files
+    public String toCSV() {
+        return bookId + "," + title + "," + author + "," + isAvailable;
+    }
 
+    public static Book fromCSV(String line) {
+        String[] p = line.split(",", -1);
+        int id = Integer.parseInt(p[0]);
+        String title = p[1];
+        String author = p[2];
+        boolean avail = Boolean.parseBoolean(p[3]);
+        return new Book(id, title, author, avail);
+    }
 }
