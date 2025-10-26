@@ -7,7 +7,7 @@ public class Employee extends Person{
 
     //constructor for Initializing fields
     public Employee(int id, String name, String address , double salary) {
-        super(id, name, address);
+        super(id, name);
         this.salary = salary;
     }
 

@@ -57,7 +57,7 @@ public class Book {
         return bookId + " - " + title + " by " + author + " [" + (isAvailable ? "Available" : "Borrowed") + "]";
     }
 
-    //write methods for read and write info from files
+    //methods for read and write info from files
     public String toCSV() {
         return bookId + "," + title + "," + author + "," + isAvailable;
     }
