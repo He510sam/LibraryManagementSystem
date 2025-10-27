@@ -6,7 +6,7 @@ import java.util.List;
 
 //Class for implementation logic of program
 public class LibrarySystem {
-    //lists for
+    //lists for save data
     private final List<Book> books = new ArrayList<>();
     private final List<Member> members = new ArrayList<>();
     private final List<Employee> employees = new ArrayList<>();
