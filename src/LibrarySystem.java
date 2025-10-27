@@ -1,4 +1,6 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //Class for implementation logic of program
@@ -103,4 +105,43 @@ public class LibrarySystem {
         saveEmployees();
         return e;
     }
+
+    //return unmodifiable version of files
+    public List<Book> listBooks() { return Collections.unmodifiableList(books); }
+    public List<Member> listMembers() { return Collections.unmodifiableList(members); }
+    public List<BorrowRecord> listRecords() { return Collections.unmodifiableList(records); }
+
+    //--> methods for searching
+    public Book findBookById(int id) {
+        for (Book b : books) if (b.getBookId() == id) return b; return null;
+    }
+    public Book findBookByTitle(String title) {
+        for (Book b : books) if (b.getTitle().equalsIgnoreCase(title)) return b; return null;
+    }
+
+    //--> methods for login
+    public Member loginMember(String username, String password) {
+        for (Member m : members) if (m.getUsername().equals(username) && m.getPassword().equals(password)) return m;
+        return null;
+    }
+    public Employee loginStaff(String username, String password) {
+        for (Employee e : employees) if (e.getUsername().equals(username) && e.getPassword().equals(password)) return e;
+        return null;
+    }
+
+    //--> method for borrow
+    public String borrowBook(Member m, int bookId) {
+        if (m.hasPenalty()) return "The Member Have Debt!!: " + m.getPenalty();
+        Book b = findBookById(bookId);
+        if (b == null) return "The Book Not Found!!";
+        if (!b.isAvailable()) return "The Book Is Currently On Loan!!";
+        String now = String.valueOf(LocalDate.now());
+        String due = String.valueOf(Integer.parseInt(now)+14);
+        records.add(new BorrowRecord(m.getId(), bookId, now.toString(), due.toString()));
+        b.setAvailable(false);
+        saveBooks(); saveRecords();
+        return "The Book Was Successfully Checked Out.\nThe Return Date IS: " + due;
+    }
+
+
 }
