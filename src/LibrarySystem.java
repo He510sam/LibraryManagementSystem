@@ -81,4 +81,26 @@ public class LibrarySystem {
         FileManager.writeAllLines(RECORD_FILE, out);
     }
 
+    //methods for add lists
+    public Book addBook(int id, String title, String author) {
+        Book b = new Book(id, title, author, true);
+        books.add(b);
+        saveBooks();
+        return b;
+    }
+
+    public Member addMember(int id, String name, String memId, String phone, String address,
+                            String username, String password) {
+        Member m = new Member(id, name, memId, phone, address, username, password);
+        members.add(m);
+        saveMembers();
+        return m;
+    }
+
+    public Employee addEmployee(int id, String name, String username, String password) {
+        Employee e = new Employee(id, name, username, password);
+        employees.add(e);
+        saveEmployees();
+        return e;
+    }
 }
