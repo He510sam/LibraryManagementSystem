@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +36,10 @@ public class LibrarySystem {
 
     //methods for load & save
     public void loadAll() {
-        loadBooks(); loadMembers(); loadEmployees(); loadRecords();
+        loadBooks();
+        loadMembers();
+        loadEmployees();
+        loadRecords();
     }
 
     //methods for load and save
@@ -44,6 +48,7 @@ public class LibrarySystem {
             if (!line.trim().isEmpty()) books.add(Book.fromCSV(line));
         }
     }
+
     private void saveBooks() {
         List<String> out = new ArrayList<>();
         for (Book b : books) out.add(b.toCSV());
@@ -55,6 +60,7 @@ public class LibrarySystem {
             if (!line.trim().isEmpty()) members.add(Member.fromCSV(line));
         }
     }
+
     private void saveMembers() {
         List<String> out = new ArrayList<>();
         for (Member m : members) out.add(m.toCSV());
@@ -66,6 +72,7 @@ public class LibrarySystem {
             if (!line.trim().isEmpty()) employees.add(Employee.fromCSV(line));
         }
     }
+
     private void saveEmployees() {
         List<String> out = new ArrayList<>();
         for (Employee e : employees) out.add(e.toCSV());
@@ -77,6 +84,7 @@ public class LibrarySystem {
             if (!line.trim().isEmpty()) records.add(BorrowRecord.fromCSV(line));
         }
     }
+
     private void saveRecords() {
         List<String> out = new ArrayList<>();
         for (BorrowRecord r : records) out.add(r.toCSV());
@@ -107,16 +115,27 @@ public class LibrarySystem {
     }
 
     //return unmodifiable version of files
-    public List<Book> listBooks() { return Collections.unmodifiableList(books); }
-    public List<Member> listMembers() { return Collections.unmodifiableList(members); }
-    public List<BorrowRecord> listRecords() { return Collections.unmodifiableList(records); }
+    public List<Book> listBooks() {
+        return Collections.unmodifiableList(books);
+    }
+
+    public List<Member> listMembers() {
+        return Collections.unmodifiableList(members);
+    }
+
+    public List<BorrowRecord> listRecords() {
+        return Collections.unmodifiableList(records);
+    }
 
     //--> methods for searching
     public Book findBookById(int id) {
-        for (Book b : books) if (b.getBookId() == id) return b; return null;
+        for (Book b : books) if (b.getBookId() == id) return b;
+        return null;
     }
+
     public Book findBookByTitle(String title) {
-        for (Book b : books) if (b.getTitle().equalsIgnoreCase(title)) return b; return null;
+        for (Book b : books) if (b.getTitle().equalsIgnoreCase(title)) return b;
+        return null;
     }
 
     //--> methods for login
@@ -124,6 +143,7 @@ public class LibrarySystem {
         for (Member m : members) if (m.getUsername().equals(username) && m.getPassword().equals(password)) return m;
         return null;
     }
+
     public Employee loginStaff(String username, String password) {
         for (Employee e : employees) if (e.getUsername().equals(username) && e.getPassword().equals(password)) return e;
         return null;
@@ -136,12 +156,61 @@ public class LibrarySystem {
         if (b == null) return "The Book Not Found!!";
         if (!b.isAvailable()) return "The Book Is Currently On Loan!!";
         String now = String.valueOf(LocalDate.now());
-        String due = String.valueOf(Integer.parseInt(now)+14);
+        String due = String.valueOf(Integer.parseInt(now) + 14);
         records.add(new BorrowRecord(m.getId(), bookId, now.toString(), due.toString()));
         b.setAvailable(false);
-        saveBooks(); saveRecords();
+        saveBooks();
+        saveRecords();
         return "The Book Was Successfully Checked Out.\nThe Return Date IS: " + due;
     }
 
+    // --> method for return & fine calculation
+    public String returnBook(int memberId, int bookId) {
+        BorrowRecord target = null;
+        for (BorrowRecord r : records) {
+            if (r.getMemberId() == memberId && r.getBookId() == bookId) {
+                target = r;
+                break;
+            }
+        }
+        Book b = findBookById(bookId);
+        if (b == null) return "The Book Not Found!!";
+        if (target == null) {
+            b.setAvailable(true);
+            saveBooks();
+            return "No loan record found!\n book marked!!";
+        }
+        LocalDate due = LocalDate.parse(target.getDueDate());
+        long daysLate = ChronoUnit.DAYS.between(due, LocalDate.now());
+        double fine = 0.0;
+        if (daysLate > 0) {
+            fine = daysLate * FINE_PER_DAY;
+            Member mem = findMemberById(memberId);
+            if (mem != null) {
+                mem.setPenalty(mem.getPenalty() + fine);
+                saveMembers();
+            }
+        }
+        records.remove(target);
+        b.setAvailable(true);
+        saveBooks();
+        saveRecords();
+        if (fine > 0) return "The book was returned. Fine imposed:" + fine + " (Lateness " + daysLate + " days).";
+        return "The book was returned without penalty.";
+    }
 
+    // helper
+    public Member findMemberById(int id) {
+        for (Member m : members) if (m.getId() == id) return m;
+        return null;
+    }
+
+    // search by partial title (case-insensitive)
+    public List<Book> searchBooksByPartialTitle(String q) {
+        List<Book> res = new ArrayList<>();
+        for (Book b : books) if (b.getTitle().toLowerCase().contains(q.toLowerCase())) res.add(b);
+        return res;
+
+
+    }
 }
