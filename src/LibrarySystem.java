@@ -7,17 +7,15 @@ import java.util.List;
 //Class for implementation logic of program
 public class LibrarySystem {
     //lists for
-    private List<Book> books = new ArrayList<>();
-    private List<Member> members = new ArrayList<>();
-    private List<Employee> employees = new ArrayList<>();
-    private List<BorrowRecord> records = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
+    private final List<Member> members = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
+    private final List<BorrowRecord> records = new ArrayList<>();
     //variables for files
     private final String BOOK_FILE = "books.txt";
     private final String MEMBER_FILE = "members.txt";
-    private final String STAFF_FILE = "staff.txt";
+    private final String EMPLOYEE_FILE = "employee.txt";
     private final String RECORD_FILE = "borrow_records.txt";
-    //attribute for base price
-    private final double FINE_PER_DAY = 500.0;
 
     //constructor for Initializing fields
     public LibrarySystem() {
@@ -68,7 +66,7 @@ public class LibrarySystem {
     }
 
     private void loadEmployees() {
-        for (String line : FileManager.readAllLines(STAFF_FILE)) {
+        for (String line : FileManager.readAllLines(EMPLOYEE_FILE)) {
             if (!line.trim().isEmpty()) employees.add(Employee.fromCSV(line));
         }
     }
@@ -76,7 +74,7 @@ public class LibrarySystem {
     private void saveEmployees() {
         List<String> out = new ArrayList<>();
         for (Employee e : employees) out.add(e.toCSV());
-        FileManager.writeAllLines(STAFF_FILE, out);
+        FileManager.writeAllLines(EMPLOYEE_FILE, out);
     }
 
     private void loadRecords() {
@@ -151,17 +149,20 @@ public class LibrarySystem {
 
     //--> method for borrow
     public String borrowBook(Member m, int bookId) {
-        if (m.hasPenalty()) return "The Member Have Debt!!: " + m.getPenalty();
+        if (m.hasPenalty()) return "The member has a debt: " + m.getPenalty();
         Book b = findBookById(bookId);
-        if (b == null) return "The Book Not Found!!";
-        if (!b.isAvailable()) return "The Book Is Currently On Loan!!";
-        String now = String.valueOf(LocalDate.now());
-        String due = String.valueOf(Integer.parseInt(now) + 14);
+        if (b == null) return "Book not found!";
+        if (!b.isAvailable()) return "Book is already borrowed!";
+
+        LocalDate now = LocalDate.now();
+        LocalDate due = now.plusDays(44);
+
         records.add(new BorrowRecord(m.getId(), bookId, now.toString(), due.toString()));
         b.setAvailable(false);
         saveBooks();
         saveRecords();
-        return "The Book Was Successfully Checked Out.\nThe Return Date IS: " + due;
+
+        return "Book borrowed successfully.\nReturn date: " + due;
     }
 
     // --> method for return & fine calculation
@@ -184,6 +185,8 @@ public class LibrarySystem {
         long daysLate = ChronoUnit.DAYS.between(due, LocalDate.now());
         double fine = 0.0;
         if (daysLate > 0) {
+            //attribute for base price
+            double FINE_PER_DAY = 500.0;
             fine = daysLate * FINE_PER_DAY;
             Member mem = findMemberById(memberId);
             if (mem != null) {
@@ -199,13 +202,13 @@ public class LibrarySystem {
         return "The book was returned without penalty.";
     }
 
-    // helper
+    //--> method for find member
     public Member findMemberById(int id) {
         for (Member m : members) if (m.getId() == id) return m;
         return null;
     }
 
-    // search by partial title (case-insensitive)
+    //--> method for search by partial title (case-insensitive)
     public List<Book> searchBooksByPartialTitle(String q) {
         List<Book> res = new ArrayList<>();
         for (Book b : books) if (b.getTitle().toLowerCase().contains(q.toLowerCase())) res.add(b);
