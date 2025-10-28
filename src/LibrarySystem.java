@@ -40,7 +40,10 @@ public class LibrarySystem {
         loadRecords();
     }
 
-    //methods for load and save
+    public void saveAll() {
+        saveBooks(); saveMembers(); saveEmployees(); saveRecords();
+    }
+
     private void loadBooks() {
         for (String line : FileManager.readAllLines(BOOK_FILE)) {
             if (!line.trim().isEmpty()) books.add(Book.fromCSV(line));
@@ -142,7 +145,7 @@ public class LibrarySystem {
         return null;
     }
 
-    public Employee loginStaff(String username, String password) {
+    public Employee loginEmployee(String username, String password) {
         for (Employee e : employees) if (e.getUsername().equals(username) && e.getPassword().equals(password)) return e;
         return null;
     }
@@ -165,7 +168,7 @@ public class LibrarySystem {
         return "Book borrowed successfully.\nReturn date: " + due;
     }
 
-    // --> method for return & fine calculation
+    //--> method for return & fine calculation
     public String returnBook(int memberId, int bookId) {
         BorrowRecord target = null;
         for (BorrowRecord r : records) {
